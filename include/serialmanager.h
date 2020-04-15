@@ -1,5 +1,5 @@
-#ifndef SERIALMANAGER_H_
-#define SERIALMANAGER_H_
+#ifndef SERIALMANAGER_H
+#define SERIALMANAGER_H
 
 class SerialManager {
     public:
@@ -7,4 +7,4 @@ class SerialManager {
         void printDebug();
 };
 
-#endif // SERIALMANAGER_H_
+#endif // SERIALMANAGER_H

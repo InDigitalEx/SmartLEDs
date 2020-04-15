@@ -1,5 +1,5 @@
-#ifndef OTAHANDLER_H_
-#define OTAHANDLER_H_
+#ifndef OTAHANDLER_H
+#define OTAHANDLER_H
 
 class OtaHandler {
 	public:
@@ -7,4 +7,4 @@ class OtaHandler {
 		void handle();
 };
 
-#endif // OTAHANDLER_H_
+#endif // OTAHANDLER_H
