@@ -33,18 +33,18 @@ ESP8266WebServer webServer(80);
 CRGB leds[NUM_LEDS];
 
 void setup() {
-	// Init serial port
+	// Init Serial port
 	serialManager.begin(115200);
+
+	// Init OTA
+	otaHandler.begin(true);
 
 	// Init fastled
 	FastLED.addLeds<LED_TYPE, DATA_PIN, LED_ORDER>(leds, NUM_LEDS);
 	FastLED.setDither(false);
 	FastLED.setCorrection(TypicalLEDStrip);
-	FastLED.setBrightness(25);
-	FastLED.setMaxPowerInVoltsAndMilliamps(5, POWER_SUPPLY_AMPERAGE);
-	for(int i = 0; i < NUM_LEDS; i++) {
-		leds[i] = CRGB::Indigo;
-	}
+	FastLED.setBrightness(30);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, AMPERAGE);
 	FastLED.show();
 
 	// Init Wifi connection with manager
@@ -53,9 +53,6 @@ void setup() {
 	WiFi.setSleepMode(WIFI_NONE_SLEEP);
 	wifiManager.setDebugOutput(DEBUG);
 	serialManager.printDebug();
-
-	// Init OTA
-	otaHandler.begin(true);
 }
 
 void loop() {
