@@ -18,7 +18,7 @@ class LightManager {
 	LightManager &operator=(LightManager &);
 	// ~~~~~~~~~~~~~~~~~
 	std::vector<Effect*> childrens_;
-	uint16_t currentIdx_;
+	uint16_t currentIdx_ = 0;
 	public:
 	// Singleton realization
 	static LightManager *getInstance()
@@ -33,7 +33,8 @@ class LightManager {
 	Effect* getCurrectEffect();
 	bool setCurrentEffect(uint16_t effect_id);
 	CRGB& operator[](const unsigned int index);
-	Effect& operator+=(Effect &right);
+	void add(Effect *effect);
+	Effect* operator+=(Effect *right);
 };
 
 #endif // LIGHTMANAGER_H

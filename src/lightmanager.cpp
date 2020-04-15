@@ -35,7 +35,11 @@ CRGB& LightManager::operator[](const unsigned int index) {
 	return this->leds[index];
 }
 
-Effect& LightManager::operator+=(Effect &right) {
-	this->childrens_.push_back(&right);
+void LightManager::add(Effect *effect) {
+	this->childrens_.push_back(effect);
+}
+
+Effect* LightManager::operator+=(Effect *right) {
+	this->childrens_.push_back(right);
 	return right;
 }
