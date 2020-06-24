@@ -4,7 +4,7 @@
 #include <inttypes.h>
 
 class Effect {
-    public:
+public:
     virtual void Run() = 0;
     uint8_t brightness;
     uint8_t speed;

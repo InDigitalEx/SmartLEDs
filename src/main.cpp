@@ -33,15 +33,18 @@ void setup() {
 	// Init OTA
 	otaHandler.begin(true);
 
+	// Init SFX
+	LightManager::getInstance()->begin();
+
 	// Init Wifi connection with manager
 	WiFiManager wifiManager;
 	wifiManager.autoConnect();
 	WiFi.setSleepMode(WIFI_NONE_SLEEP);
 	wifiManager.setDebugOutput(DEBUG);
 	serialManager.printDebug();
-	LightManager::getInstance()->begin();
 }
 
 void loop() {
 	otaHandler.handle();
+	LightManager::getInstance()->handle();
 }

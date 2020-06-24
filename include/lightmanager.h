@@ -4,10 +4,9 @@
 #define FASTLED_ESP8266_RAW_PIN_ORDER
 #define FASTLED_INTERRUPT_RETRY_COUNT 0
 
-#include <Arduino.h>
-#include <FastLED.h>
-#include <vector>
 #include <inttypes.h>
+#include <vector>
+#include <FastLED.h>
 #include "effect.h"
 
 class LightManager {
@@ -19,6 +18,7 @@ class LightManager {
 	// ~~~~~~~~~~~~~~~~~
 	std::vector<Effect*> childrens_;
 	uint16_t currentIdx_ = 0;
+
 	public:
 	// Singleton realization
 	static LightManager *getInstance()
@@ -34,7 +34,7 @@ class LightManager {
 	bool setCurrentEffect(uint16_t effect_id);
 	CRGB& operator[](const unsigned int index);
 	void add(Effect *effect);
-	Effect* operator+=(Effect *right);
+	LightManager* operator+=(Effect *right);
 };
 
 #endif // LIGHTMANAGER_H
