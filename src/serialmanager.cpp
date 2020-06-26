@@ -1,15 +1,13 @@
 #include "serialmanager.h"
-#include <Arduino.h>
-#include <HardwareSerial.h>
 
 void SerialManager::begin(const unsigned long baud = 115200) {
 	Serial.begin(115200);
-	delay(100); // For relability
 	Serial.setDebugOutput(DEBUG);
+	delay(100); // For relability
 }
 
 void SerialManager::printDebug() {
-	Serial.println("");
+	Serial.println("DEBUG INFO:\n");
 	Serial.print("Free Heap: ");
 	Serial.println(ESP.getFreeHeap());
 	Serial.print("Boot Mode: ");
@@ -29,10 +27,8 @@ void SerialManager::printDebug() {
 	Serial.print("Flash chip real size: ");
 	Serial.println(ESP.getFlashChipRealSize());
 	Serial.print("Flash chip size: ");
-	Serial.println(ESP.getFlashChipSpeed());
+	Serial.println(ESP.getFlashChipSize());
 	Serial.print("Flash chip vendor ID: ");
-	Serial.println(ESP.getFlashChipVendorId());
-	Serial.print("Free cont. stack: ");
 	Serial.println(ESP.getFreeContStack());
 	Serial.print("Free sketch space: ");
 	Serial.println(ESP.getFreeSketchSpace());
@@ -46,8 +42,6 @@ void SerialManager::printDebug() {
 	Serial.println(ESP.getResetInfo());
 	Serial.print("Reset reason: ");
 	Serial.println(ESP.getResetReason());
-	Serial.print("SDK version: ");
-	Serial.println(ESP.getSdkVersion());
 	Serial.print("Sketch size: ");
 	Serial.println(ESP.getSketchSize());
 	Serial.print("ESP Voltage: ");

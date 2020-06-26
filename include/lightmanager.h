@@ -2,39 +2,30 @@
 #define LIGHTMANAGER_H
 
 #define FASTLED_ESP8266_RAW_PIN_ORDER
-#define FASTLED_INTERRUPT_RETRY_COUNT 0
-
+#include <FastLED.h>
 #include <inttypes.h>
 #include <vector>
-#include <FastLED.h>
 #include "effect.h"
 
 class LightManager {
-	private:
+private:
 	// Singleton realization 
-	LightManager() { }
+	LightManager();
 	LightManager(const LightManager &);
 	LightManager &operator=(LightManager &);
-	// ~~~~~~~~~~~~~~~~~
-	std::vector<Effect*> childrens_;
-	uint16_t currentIdx_ = 0;
 
-	public:
-	// Singleton realization
-	static LightManager *getInstance()
-	{
-		static LightManager instance;
-		return &instance;
-	}
-	// ~~~~~~~~~~~~~~~~~
-	CRGB leds[NUM_LEDS];
+	std::vector<Effect *> effects_;
+	uint16_t currentEffectIdx_ = 0;
+	unsigned long lastCallTime_ = 0;
+public:
+	static LightManager *getInstance();
 	void begin();
 	void handle();
 	Effect* getCurrectEffect();
 	bool setCurrentEffect(uint16_t effect_id);
 	CRGB& operator[](const unsigned int index);
-	void add(Effect *effect);
-	LightManager* operator+=(Effect *right);
+	void addEffect(Effect *effect);
+	CRGBArray<NUM_LEDS> leds;
 };
 
 #endif // LIGHTMANAGER_H

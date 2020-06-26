@@ -1,8 +1,6 @@
 #include "otahandler.h"
-#include <ArduinoOTA.h>
-#include <ESP8266mDNS.h>
 
-void OtaHandler::begin(bool reboot = true) {
+void OtaHandler::begin(bool rebootOnSuccess = true){
 	ArduinoOTA.onStart([]() {
 		Serial.println("[OTA] Start");
 	});
@@ -13,38 +11,33 @@ void OtaHandler::begin(bool reboot = true) {
 		Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
 	});
 	ArduinoOTA.onError([](ota_error_t error) {
-		switch (error)
-		{
-		case OTA_AUTH_ERROR:
-		{
+		switch (error) {
+		case OTA_AUTH_ERROR: {
 			Serial.println("[OTA] Auth Failed");
 			break;
 		}
-		case OTA_BEGIN_ERROR:
-		{
+		case OTA_BEGIN_ERROR: {
 			Serial.println("[OTA] Begin Failed");
 			break;
 		}
-		case OTA_CONNECT_ERROR:
-		{
+		case OTA_CONNECT_ERROR: {
 			Serial.println("[OTA] Connect Failed");
 			break;
 		}
-		case OTA_END_ERROR:
-		{
+		case OTA_END_ERROR: {
 			Serial.println("[OTA] End Failed");
 			break;
 		}
-		case OTA_RECEIVE_ERROR:
-		{
+		case OTA_RECEIVE_ERROR: {
 			Serial.println("[OTA] Receive Failed");
 			break;
 		}
-		default:
+		default: {
 			Serial.printf("[OTA] Error[%u]", error);
 		}
+		}
 	});
-	ArduinoOTA.setRebootOnSuccess(true);
+	ArduinoOTA.setRebootOnSuccess(rebootOnSuccess);
 	ArduinoOTA.begin();
 }
 
