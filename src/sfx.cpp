@@ -1,22 +1,19 @@
-#include "sfx.h"
+#include "ledcontroller.h"
+#include "effect.h"
 
-LightManager *light = LightManager::getInstance();
+LedController *controller = LedController::getInstance();
+CRGB *leds = controller->getLeds();
 
 // Effects
-class Rainbow : public Effect {
-private:
-	byte counter = 0;
-
+class PaletteViewer : public Effect {
 public:
-	Rainbow() {
-		this->speed = 50;
-		this->scale = 2;
-		light->addEffect(this);
-	}
+	PaletteViewer() : Effect(F("Просмотр палитр"), 128, 10, 0) {
+		controller->addEffect(this);
+	};
 	void Run() {
-		for (int i = 0; i < NUM_LEDS; i++) {
-			light->leds[i] = CHSV(counter + i * light->getCurrectEffect()->scale, 255, 255);
-		}
-		counter++;
+		static uint8_t startindex = 0;
+		startindex--;
+		fill_palette(leds, NUM_LEDS, startindex, (256 / NUM_LEDS) + 1,
+		controller->currentPalette->palette, brightness, LINEARBLEND);
 	}
-} rainbowFx;
+} paletteViewer;

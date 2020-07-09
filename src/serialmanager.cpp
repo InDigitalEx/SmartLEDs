@@ -1,50 +1,53 @@
+#include <Arduino.h>
+#include <HardwareSerial.h>
 #include "serialmanager.h"
 
-void SerialManager::begin(const unsigned long baud = 115200) {
+void SerialManager::init(const unsigned long baud = 115200) {
 	Serial.begin(115200);
-	Serial.setDebugOutput(DEBUG);
+	#ifdef DEBUG
+	Serial.setDebugOutput(true);
+	#endif
 	delay(100); // For relability
 }
-
-void SerialManager::printDebug() {
-	Serial.println("DEBUG INFO:\n");
-	Serial.print("Free Heap: ");
+void SerialManager::printDebugInfo() {
+	Serial.println(F("DEBUG INFO:\n"));
+	Serial.print(F("Free Heap: "));
 	Serial.println(ESP.getFreeHeap());
-	Serial.print("Boot Mode: ");
+	Serial.print(F("Boot Mode: "));
 	Serial.println(ESP.getBootMode());
-	Serial.print("Boot ver.: ");
+	Serial.print(F("Boot ver.: "));
 	Serial.println(ESP.getBootVersion());
-	Serial.print("Chip ID: ");
+	Serial.print(F("Chip ID: "));
 	Serial.println(ESP.getChipId());
-	Serial.print("Core ver.: ");
+	Serial.print(F("Core ver.: "));
 	Serial.println(ESP.getCoreVersion());
-	Serial.print("CPU freq: ");
+	Serial.print(F("CPU freq: "));
 	Serial.println(ESP.getCpuFreqMHz());
-	Serial.print("Flash chip ID: ");
+	Serial.print(F("Flash chip ID: "));
 	Serial.println(ESP.getFlashChipId());
-	Serial.print("Flash chip mode: ");
+	Serial.print(F("Flash chip mode: "));
 	Serial.println(ESP.getFlashChipMode());
-	Serial.print("Flash chip real size: ");
+	Serial.print(F("Flash chip real size: "));
 	Serial.println(ESP.getFlashChipRealSize());
-	Serial.print("Flash chip size: ");
+	Serial.print(F("Flash chip size: "));
 	Serial.println(ESP.getFlashChipSize());
-	Serial.print("Flash chip vendor ID: ");
+	Serial.print(F("Flash chip vendor ID: "));
 	Serial.println(ESP.getFreeContStack());
-	Serial.print("Free sketch space: ");
+	Serial.print(F("Free sketch space: "));
 	Serial.println(ESP.getFreeSketchSpace());
-	Serial.print("Full version: ");
+	Serial.print(F("Full version: "));
 	Serial.println(ESP.getFullVersion());
-	Serial.print("Heap fragmentation: ");
+	Serial.print(F("Heap fragmentation: "));
 	Serial.println(ESP.getHeapFragmentation());
-	Serial.print("Max free block size: ");
+	Serial.print(F("Max free block size: "));
 	Serial.println(ESP.getMaxFreeBlockSize());
-	Serial.print("Reset info: ");
+	Serial.print(F("Reset info: "));
 	Serial.println(ESP.getResetInfo());
-	Serial.print("Reset reason: ");
+	Serial.print(F("Reset reason: "));
 	Serial.println(ESP.getResetReason());
-	Serial.print("Sketch size: ");
+	Serial.print(F("Sketch size: "));
 	Serial.println(ESP.getSketchSize());
-	Serial.print("ESP Voltage: ");
+	Serial.print(F("ESP Voltage: "));
 	Serial.println(ESP.getVcc() / 1024.0);
 	Serial.println();
 }

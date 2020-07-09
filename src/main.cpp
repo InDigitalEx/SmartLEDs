@@ -7,32 +7,34 @@ ADC_MODE(ADC_VCC)
 
 #include <WiFiManager.h>
 #include "serialmanager.h"
-#include "otahandler.h"
-#include "lightmanager.h"
+#include "otaupdater.h"
+#include "ledcontroller.h"
 
-OtaHandler ota;
+OtaUpdater otaUpdater;
 SerialManager serial;
 
 void setup() {
 	// Init Serial
-	serial.begin(115200);
-
+	serial.init(115200);
+	
 	// Init OTA
-	ota.begin(true);
+	otaUpdater.init(true);
 
 	// Init SFX
-	LightManager::getInstance()->begin();
+	LedController::getInstance()->init();
 
 	// Init Wifi connection manager
 	WiFiManager wifiManager;
 	wifiManager.autoConnect();
+	#ifdef DEBUG
+	wifiManager.setDebugOutput(true);
+	#endif
 	WiFi.setSleepMode(WIFI_NONE_SLEEP);
-	wifiManager.setDebugOutput(DEBUG);
 
-	serial.printDebug();
+	serial.printDebugInfo();
 }
 
 void loop() {
-	ota.handle();
-	LightManager::getInstance()->handle();
+	otaUpdater.handle();
+	LedController::getInstance()->handle();
 }

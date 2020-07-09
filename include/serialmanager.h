@@ -1,13 +1,10 @@
 #ifndef SERIALMANAGER_H
 #define SERIALMANAGER_H
 
-#include <Arduino.h>
-#include <HardwareSerial.h>
-
 class SerialManager {
 public:
-    void begin(unsigned long baud);
-    void printDebug();
+    void init(unsigned long baud);
+    void printDebugInfo();
 };
 
 #endif // SERIALMANAGER_H
