@@ -7,9 +7,9 @@
 
 class Palette {
 public:
-    Palette(String palette_name, CRGBPalette16 pal);
-    String name;
-    CRGBPalette16 palette;
+	Palette(String palette_name, CRGBPalette16 pal);
+	String name;
+	CRGBPalette16 palette;
 };
 
 #endif // PALETTE_H

@@ -20,11 +20,19 @@ void LedController::init() {
 }
 
 void LedController::handle() {
-	if(millis() - lastCallTime_ > getCurrentEffect()->speed) {
-		lastCallTime_ = millis();
-		getCurrentEffect()->Run();
+	if(power) {
+		Effect *effect = getCurrentEffect();
+		FastLED.setBrightness(effect->brightness);
+		if (millis() - lastCallTime_ > effect->speed) {
+			lastCallTime_ = millis();
+			effect->Run();
+		}
+		FastLED.delay(1000 / UPDATES_PER_SECOND);
 	}
-	FastLED.delay(1000 / UPDATES_PER_SECOND);
+	else {
+		fill_solid(leds_, NUM_LEDS, CRGB::Black);
+		FastLED.show();
+	}
 }
 
 Effect *LedController::getCurrentEffect() {

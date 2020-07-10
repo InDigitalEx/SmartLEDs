@@ -7,7 +7,7 @@ CRGB *leds = controller->getLeds();
 // Effects
 class PaletteViewer : public Effect {
 public:
-	PaletteViewer() : Effect(F("Просмотр палитр"), 128, 10, 0) {
+	PaletteViewer() : Effect(F("Просмотр палитр"), 128, 10, 0, WITH_PALETTE) {
 		controller->addEffect(this);
 	};
 	void Run() {

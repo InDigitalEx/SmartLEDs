@@ -21,6 +21,7 @@ public:
 	void addPalette(Palette *palette);
 	CRGB* getLeds();
 
+	bool power = true;
 private:
 	// Singleton realization
 	LedController() = default;

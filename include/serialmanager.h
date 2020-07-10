@@ -3,8 +3,8 @@
 
 class SerialManager {
 public:
-    void init(unsigned long baud);
-    void printDebugInfo();
+	void init(unsigned long baud);
+	void printDebugInfo();
 };
 
 #endif // SERIALMANAGER_H
