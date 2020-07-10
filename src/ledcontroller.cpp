@@ -8,25 +8,21 @@ LedController* LedController::getInstance() {
 void LedController::init() {
 	FastLED.addLeds<LED_TYPE, DATA_PIN, LED_ORDER>(leds_, NUM_LEDS);
 	FastLED.setCorrection(TypicalLEDStrip);
-	FastLED.setBrightness(128);
-	FastLED.setMaxPowerInVoltsAndMilliamps(5, POWER_SUPPLY_AMPERAGE);
 	FastLED.setDither(true);
-	
-	// Fill all strip
-	for(int i = 0; i < NUM_LEDS; i++) {
-		leds_[i] = CRGB::Black;
-	}
+	FastLED.setBrightness(0);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, POWER_SUPPLY_AMPERAGE);
+	fill_solid(leds_, NUM_LEDS, CRGB::Black);
 	FastLED.show();
 
 	// Set default current values
-	currentEffect = effects_[currentEffectIdx_];
-	currentPalette = palettes_[currentPaletteIdx];
+	setCurrentEffect(0);
+	setCurrentPalette(0);
 }
 
 void LedController::handle() {
-	if(millis() - lastCallTime_ > currentEffect->speed) {
+	if(millis() - lastCallTime_ > getCurrentEffect()->speed) {
 		lastCallTime_ = millis();
-		currentEffect->Run();
+		getCurrentEffect()->Run();
 	}
 	FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
@@ -39,28 +35,18 @@ Effect *LedController::getCurrentEffect() {
 }
 
 Palette *LedController::getCurrentPalette() {
-	if (palettes_.size() == 0)
+	if(palettes_.size() == 0)
 		return nullptr;
 
-	return palettes_[currentPaletteIdx];
+	return palettes_[currentPaletteIdx_];
 }
 
-bool LedController::setCurrentEffect(uint16_t effect_id) {
-	if(effect_id > effects_.size())
-		return false;
-	
-	currentEffectIdx_ = effect_id;
-	currentEffect = effects_[currentEffectIdx_];
-	return true;
+void LedController::setCurrentEffect(uint8_t effect_id) {
+	currentEffectIdx_ = effect_id >= effects_.size() ? effects_.size() - 1 : effect_id;
 }
 
-bool LedController::setCurrentPalette(uint16_t palette_id) {
-	if (palette_id > palettes_.size())
-		return false;
-	
-	currentPaletteIdx = palette_id;
-	currentPalette = palettes_[currentPaletteIdx];
-	return true;
+void LedController::setCurrentPalette(uint8_t palette_id) {
+	currentPaletteIdx_ = palette_id >= palettes_.size() ? palettes_.size() - 1 : palette_id;
 }
 
 void LedController::addEffect(Effect *effect) {

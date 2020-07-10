@@ -13,12 +13,10 @@ public:
 	static LedController *getInstance();
 	void init();
 	void handle();
-	Effect* currentEffect = nullptr;
-	Palette* currentPalette = nullptr;
 	Effect* getCurrentEffect();
 	Palette* getCurrentPalette();
-	bool setCurrentEffect(uint16_t effect_id);
-	bool setCurrentPalette(uint16_t palette_id); 
+	void setCurrentEffect(uint8_t effect_id);
+	void setCurrentPalette(uint8_t palette_id);
 	void addEffect(Effect *effect);
 	void addPalette(Palette *palette);
 	CRGB* getLeds();
@@ -32,8 +30,8 @@ private:
 	CRGB leds_[NUM_LEDS];
 	std::vector<Effect *> effects_;
 	std::vector<Palette *> palettes_;
-	uint16_t currentEffectIdx_ = 0;
-	uint16_t currentPaletteIdx = 0;
+	uint8_t currentEffectIdx_ = 0;
+	uint8_t currentPaletteIdx_ = 0;
 	uint32_t lastCallTime_ = 0;
 };
 

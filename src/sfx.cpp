@@ -14,6 +14,6 @@ public:
 		static uint8_t startindex = 0;
 		startindex--;
 		fill_palette(leds, NUM_LEDS, startindex, (256 / NUM_LEDS) + 1,
-		controller->currentPalette->palette, brightness, LINEARBLEND);
+			controller->getCurrentPalette()->palette, brightness, LINEARBLEND);
 	}
 } paletteViewer;

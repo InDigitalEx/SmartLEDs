@@ -22,7 +22,7 @@ void setup() {
 
 	// Init SFX
 	LedController::getInstance()->init();
-
+	
 	// Init Wifi connection manager
 	WiFiManager wifiManager;
 	wifiManager.autoConnect();
