@@ -7,13 +7,16 @@ CRGB *leds = controller->getLeds();
 // Effects
 class PaletteViewer : public Effect {
 public:
-	PaletteViewer() : Effect(F("Просмотр палитр"), 128, 10, 0, WITH_PALETTE) {
+	PaletteViewer() : Effect(F("Просмотр палитр"), 255, 255, 2, WITH_PALETTE) {
 		controller->addEffect(this);
 	};
 	void Run() {
-		static uint8_t startindex = 0;
-		startindex--;
-		fill_palette(leds, NUM_LEDS, startindex, (256 / NUM_LEDS) + 1,
+		EVERY_N_SECONDS(5) {
+			static size_t i;
+			if(++i >= controller->getPalettesArray()->size()) i = 0;
+			controller->setCurrentPalette(i);
+		}
+		fill_palette(leds, NUM_LEDS, 0, scale,
 			controller->getCurrentPalette()->palette, brightness, LINEARBLEND);
 	}
 } paletteViewer;

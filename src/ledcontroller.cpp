@@ -22,11 +22,11 @@ void LedController::init() {
 void LedController::handle() {
 	if(power) {
 		Effect *effect = getCurrentEffect();
-		FastLED.setBrightness(effect->brightness);
 		if (millis() - lastCallTime_ > effect->speed) {
 			lastCallTime_ = millis();
 			effect->Run();
 		}
+		FastLED.setBrightness(effect->brightness);
 		FastLED.delay(1000 / UPDATES_PER_SECOND);
 	}
 	else {
@@ -50,6 +50,7 @@ Palette *LedController::getCurrentPalette() {
 }
 
 void LedController::setCurrentEffect(uint8_t effect_id) {
+	lastCallTime_ = 0;
 	currentEffectIdx_ = effect_id >= effects_.size() ? effects_.size() - 1 : effect_id;
 }
 
@@ -65,6 +66,19 @@ void LedController::addPalette(Palette *palette) {
 	palettes_.push_back(palette);
 }
 
+std::vector<Effect *>* LedController::getEffectsArray() {
+	return &effects_;
+}
+
+std::vector<Palette *>* LedController::getPalettesArray() {
+	return &palettes_;
+}
+
 CRGB* LedController::getLeds() {
 	return leds_;
+}
+
+void LedController::setPower(bool status) {
+	lastCallTime_ = 0;
+	power = status;
 }

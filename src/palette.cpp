@@ -7,10 +7,11 @@ Palette::Palette(String palette_name, CRGBPalette16 pal) :
 }
 
 // --- List of palettes ---
-DEFINE_GRADIENT_PALETTE(Retro_p) {
-	0,      188,    135,    1,
-	255,    46,     7,      1
-};
-
-Palette partyPalette("Party", PartyColors_p);
-Palette retroPalette("Retro", Retro_p);
+FL_PROGMEM Palette rainbowPalette("Rainbow", Rainbow_gp);
+FL_PROGMEM Palette rainbowStripePalette("Rainbow Stripe", RainbowStripeColors_p);
+FL_PROGMEM Palette cloudPalette("Cloud", CloudColors_p);
+FL_PROGMEM Palette lavaPalette("Lava", LavaColors_p);
+FL_PROGMEM Palette oceanPalette("Ocean", OceanColors_p);
+FL_PROGMEM Palette forestPalette("Forest", ForestColors_p);
+FL_PROGMEM Palette partyPalette("Party", PartyColors_p);
+FL_PROGMEM Palette heatPalette("Heat", HeatColors_p);

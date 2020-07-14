@@ -19,7 +19,10 @@ public:
 	void setCurrentPalette(uint8_t palette_id);
 	void addEffect(Effect *effect);
 	void addPalette(Palette *palette);
+	std::vector<Effect *>* getEffectsArray();
+	std::vector<Palette *>* getPalettesArray();
 	CRGB* getLeds();
+	void setPower(bool status);
 
 	bool power = true;
 private:
