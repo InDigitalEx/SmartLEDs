@@ -8,8 +8,7 @@ LedController* LedController::getInstance() {
 void LedController::init() {
 	FastLED.addLeds<LED_TYPE, DATA_PIN, LED_ORDER>(leds_, NUM_LEDS);
 	FastLED.setCorrection(TypicalLEDStrip);
-	FastLED.setDither(true);
-	FastLED.setBrightness(0);
+	FastLED.setDither(false);
 	FastLED.setMaxPowerInVoltsAndMilliamps(5, POWER_SUPPLY_AMPERAGE);
 	fill_solid(leds_, NUM_LEDS, CRGB::Black);
 	FastLED.show();
@@ -20,19 +19,25 @@ void LedController::init() {
 }
 
 void LedController::handle() {
-	if(power) {
-		Effect *effect = getCurrentEffect();
-		if (millis() - lastCallTime_ > effect->speed) {
-			lastCallTime_ = millis();
-			effect->Run();
+	if(!power) {
+		for(int i = 0; i < NUM_LEDS; i++) {
+			nblend(leds_[i], CRGB::Black, 24);
 		}
-		FastLED.setBrightness(effect->brightness);
 		FastLED.delay(1000 / UPDATES_PER_SECOND);
+		return;
 	}
-	else {
-		fill_solid(leds_, NUM_LEDS, CRGB::Black);
-		FastLED.show();
+
+	nblendPaletteTowardPalette(palette_, palettes_[currentPaletteIdx_]->palette, 24);
+
+	Effect *effect = getCurrentEffect();
+	if (millis() - lastCallTime_ > effect->speed) {
+		lastCallTime_ = millis();
+		effect->Run();
 	}
+
+	FastLED.setBrightness(effect->brightness);
+	FastLED.show();
+	FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
 
 Effect *LedController::getCurrentEffect() {
@@ -42,11 +47,8 @@ Effect *LedController::getCurrentEffect() {
 	return effects_[currentEffectIdx_];
 }
 
-Palette *LedController::getCurrentPalette() {
-	if(palettes_.size() == 0)
-		return nullptr;
-
-	return palettes_[currentPaletteIdx_];
+CRGBPalette16 &LedController::getCurrentPalette() {
+	return palette_;
 }
 
 void LedController::setCurrentEffect(uint8_t effect_id) {

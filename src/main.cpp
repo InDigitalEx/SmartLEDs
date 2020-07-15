@@ -35,6 +35,8 @@ void setup() {
 }
 
 void loop() {
+	randomSeed(micros());
+	random16_add_entropy(random(0xFFFF));
 	otaUpdater.handle();
 	LedController::getInstance()->handle();
 }

@@ -1,7 +1,7 @@
 #ifndef LEDCONTROLLER_H
 #define LEDCONTROLLER_H
 
-#define FASTLED_ESP8266_RAW_PIN_ORDER
+#define FASTLED_INTERRUPT_RETRY_COUNT 0
 #include <FastLED.h>
 #include <inttypes.h>
 #include <vector>
@@ -14,7 +14,7 @@ public:
 	void init();
 	void handle();
 	Effect* getCurrentEffect();
-	Palette* getCurrentPalette();
+	CRGBPalette16& getCurrentPalette();
 	void setCurrentEffect(uint8_t effect_id);
 	void setCurrentPalette(uint8_t palette_id);
 	void addEffect(Effect *effect);
@@ -32,6 +32,7 @@ private:
 	LedController &operator=(LedController &) = delete;
 
 	CRGB leds_[NUM_LEDS];
+	CRGBPalette16 palette_;
 	std::vector<Effect *> effects_;
 	std::vector<Palette *> palettes_;
 	uint8_t currentEffectIdx_ = 0;

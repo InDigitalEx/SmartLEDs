@@ -11,16 +11,17 @@ enum EffectFlags{
 
 class Effect {
 public:
-	Effect(String effect_name, uint8_t default_brightness,
-		uint8_t default_speed, uint8_t default_scale, uint8_t default_flags = 0) :
-		name(effect_name), brightness(default_brightness), speed(default_speed),
-		scale(default_scale), flags(default_flags) {}
+	Effect(String effect_name = "Безымянный",
+	uint8_t default_speed = 10, uint8_t default_scale = 1,
+	uint8_t default_flags = 0, uint8_t default_brightness = 255) : 
+	name(effect_name), speed(default_speed), scale(default_scale),
+	flags(default_flags), brightness(default_brightness) {}
 	virtual void Run() = 0;
 	String name;
-	uint8_t brightness;
 	uint8_t speed;
 	uint8_t scale;
 	uint8_t flags;
+	uint8_t brightness;
 };
 
 #endif // EFFECT_H
