@@ -15,12 +15,14 @@ public:
 	void handle();
 	Effect* getCurrentEffect();
 	CRGBPalette16& getCurrentPalette();
+	void getCurrentPalette(Palette& palette);
+	String& getCurrentPaletteName();
 	void setCurrentEffect(uint8_t effect_id);
 	void setCurrentPalette(uint8_t palette_id);
 	void addEffect(Effect *effect);
 	void addPalette(Palette *palette);
-	std::vector<Effect *>* getEffectsArray();
-	std::vector<Palette *>* getPalettesArray();
+	std::vector<Effect *>* getVectorOfEffects();
+	std::vector<Palette *>* getVectorOfPalettes();
 	CRGB* getLeds();
 	void setPower(bool status);
 

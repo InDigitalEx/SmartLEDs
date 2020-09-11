@@ -51,6 +51,15 @@ CRGBPalette16 &LedController::getCurrentPalette() {
 	return palette_;
 }
 
+void LedController::getCurrentPalette(Palette& palette) {
+	palette.name = palettes_[currentPaletteIdx_]->name;
+	palette.palette = palette_;
+}
+
+String &LedController::getCurrentPaletteName() {
+	return palettes_[currentPaletteIdx_]->name;
+}
+
 void LedController::setCurrentEffect(uint8_t effect_id) {
 	lastCallTime_ = 0;
 	currentEffectIdx_ = effect_id >= effects_.size() ? effects_.size() - 1 : effect_id;
@@ -68,11 +77,11 @@ void LedController::addPalette(Palette *palette) {
 	palettes_.push_back(palette);
 }
 
-std::vector<Effect *>* LedController::getEffectsArray() {
+std::vector<Effect *>* LedController::getVectorOfEffects() {
 	return &effects_;
 }
 
-std::vector<Palette *>* LedController::getPalettesArray() {
+std::vector<Palette *>* LedController::getVectorOfPalettes() {
 	return &palettes_;
 }
 
