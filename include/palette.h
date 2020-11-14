@@ -5,6 +5,8 @@
 #include <WString.h>
 #include "ledcontroller.h"
 
+const unsigned int PALETTE_OBJECTS = 1;
+
 class Palette {
 public:
 	Palette(String palette_name, CRGBPalette16 pal);

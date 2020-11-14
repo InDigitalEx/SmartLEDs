@@ -1,13 +1,13 @@
 #include "ledcontroller.h"
 #include "effect.h"
 
-LedController *controller = LedController::getInstance();
-CRGB *leds = controller->getLeds();
+static LedController *controller = LedController::getInstance();
+static CRGB *leds = controller->getLeds();
 
 // Effects
 class PaletteViewer : public Effect {
 public:
-	PaletteViewer() : Effect(F("Просмотр палитр"), 10, 2, PALETTE) {
+	PaletteViewer() : Effect(F("Просмотр палитр"), 0, 2, HAS_PALETTE) {
 		controller->addEffect(this);
 	};
 	void Run() {
@@ -18,14 +18,14 @@ public:
 			controller->setCurrentPalette(i);
 		}
 		static byte counter;
-		fill_palette(leds, NUM_LEDS, counter, scale,
-			controller->getCurrentPalette(), brightness, LINEARBLEND);
+		fill_palette(leds, NUM_LEDS, counter, getScale(),
+			controller->getCurrentPalette(), getBrightness(), LINEARBLEND);
 	}
 } paletteViewer;
 
 class Pride : public Effect {
 public:
-	Pride() : Effect(F("Прайд"), 10) {
+	Pride() : Effect(F("Pride"), 10) {
 		controller->addEffect(this);
 	};
 	void Run() {

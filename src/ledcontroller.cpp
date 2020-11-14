@@ -12,30 +12,26 @@ void LedController::init() {
 	FastLED.setMaxPowerInVoltsAndMilliamps(5, POWER_SUPPLY_AMPERAGE);
 	fill_solid(leds_, NUM_LEDS, CRGB::Black);
 	FastLED.show();
-
-	// Set default current values
-	setCurrentEffect(0);
-	setCurrentPalette(0);
 }
 
 void LedController::handle() {
-	if(!power) {
+	Effect *effect = getCurrentEffect();
+
+	if(!power_) {
 		for(int i = 0; i < NUM_LEDS; i++) {
 			nblend(leds_[i], CRGB::Black, 24);
 		}
-		FastLED.delay(1000 / UPDATES_PER_SECOND);
-		return;
+	} 
+	else {
+		nblendPaletteTowardPalette(palette_, palettes_[currentPaletteIdx_]->palette, 24);
+
+		if (millis() - lastCallTime_ >= effect->getSpeed()) {
+			lastCallTime_ = millis();
+			effect->Run();
+		}
 	}
 
-	nblendPaletteTowardPalette(palette_, palettes_[currentPaletteIdx_]->palette, 24);
-
-	Effect *effect = getCurrentEffect();
-	if (millis() - lastCallTime_ > effect->speed) {
-		lastCallTime_ = millis();
-		effect->Run();
-	}
-
-	FastLED.setBrightness(effect->brightness);
+	FastLED.setBrightness(effect->getBrightness());
 	FastLED.show();
 	FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
@@ -91,5 +87,17 @@ CRGB* LedController::getLeds() {
 
 void LedController::setPower(bool status) {
 	lastCallTime_ = 0;
-	power = status;
+	power_ = status;
+}
+
+void LedController::setSpeed(uint8_t value) {
+	getCurrentEffect()->setSpeed(value);
+}
+
+void LedController::setScale(uint8_t value) {
+	getCurrentEffect()->setScale(value);
+}
+
+void LedController::setBrightness(uint8_t value) {
+	getCurrentEffect()->setBrightness(value);
 }

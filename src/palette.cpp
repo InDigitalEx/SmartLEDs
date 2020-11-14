@@ -1,6 +1,7 @@
 #include "ledcontroller.h"
 #include "palette.h"
 
+
 Palette::Palette(String palette_name, CRGBPalette16 pal) :
 	name(palette_name), palette(pal) {
 	LedController::getInstance()->addPalette(this);

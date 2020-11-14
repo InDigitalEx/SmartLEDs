@@ -1,6 +1,7 @@
+#include "serialmanager.h"
 #include <Arduino.h>
 #include <HardwareSerial.h>
-#include "serialmanager.h"
+
 
 void SerialManager::init(const unsigned long baud = 115200) {
 	Serial.begin(115200);

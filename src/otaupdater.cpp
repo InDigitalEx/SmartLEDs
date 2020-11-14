@@ -1,6 +1,5 @@
-#include <ArduinoOTA.h>
-#include <ESP8266mDNS.h>
 #include "otaupdater.h"
+#include <ArduinoOTA.h>
 
 void OtaUpdater::init(bool rebootOnSuccess = true) {
 	ArduinoOTA.onStart([]() {
