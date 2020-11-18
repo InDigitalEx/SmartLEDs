@@ -2,6 +2,7 @@
 #define WEB_H
 
 #include <Arduino.h>
+#include <WebSocketsServer.h>
 #include <ESPAsyncUDP.h>
 #include "jsonhandler.h"
 
@@ -15,8 +16,9 @@ public:
 	void init();
 	void handle();
 private:
-	JsonHandler json;
-	AsyncUDP udpSocket_;
+	JsonHandler *json;
+	AsyncUDP *udpSocket_;
+	WebSocketsServer *webSocket_;
 
 	// Singleton realization
 	Web() = default;

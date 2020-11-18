@@ -30,11 +30,13 @@ public:
 	std::vector<Effect *>* getVectorOfEffects();
 	std::vector<Palette *>* getVectorOfPalettes();
 	CRGB* getLeds();
+	uint8_t getMode();
 
 	void setPower(bool status);
 	void setSpeed(uint8_t value);
 	void setScale(uint8_t value);
 	void setBrightness(uint8_t value);
+	void setMode(uint8_t value);
 private:
 	// Singleton realization
 	LedController() = default;

@@ -45,7 +45,6 @@ void loop() {
 	randomSeed(micros());
 	random16_add_entropy(random(0xFFFF));
 
-	ledController->setCurrentEffect(1);
 	ledController->handle();
 	web->handle();
 	otaUpdater.handle();

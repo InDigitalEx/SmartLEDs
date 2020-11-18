@@ -85,6 +85,10 @@ CRGB* LedController::getLeds() {
 	return leds_;
 }
 
+uint8_t LedController::getMode() {
+	return mode_;
+}
+
 void LedController::setPower(bool status) {
 	lastCallTime_ = 0;
 	power_ = status;
@@ -100,4 +104,8 @@ void LedController::setScale(uint8_t value) {
 
 void LedController::setBrightness(uint8_t value) {
 	getCurrentEffect()->setBrightness(value);
+}
+
+void LedController::setMode(uint8_t value) {
+	mode_ = value;
 }

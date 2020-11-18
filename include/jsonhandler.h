@@ -10,6 +10,7 @@ private:
 public:
     void init();
     void generateJsonList(String& destination);
+    void handleIncomingText(uint8_t* payload);
 };
 
 #endif // JSONHANDLER_H
