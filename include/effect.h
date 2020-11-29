@@ -34,7 +34,7 @@ public:
 	}
 
 	// Speed
-	inline uint8_t getSpeed() {
+	inline uint8_t getSpeed() const {
 		return speed_;
 	}
 
@@ -43,7 +43,7 @@ public:
 	}
 
 	// Scale
-	inline uint8_t getScale() {
+	inline uint8_t getScale() const {
 		return scale_;
 	}
 
@@ -51,7 +51,7 @@ public:
 		scale_ = scale;
 	}
 	
-	inline uint8_t getFlags() {
+	inline uint8_t getFlags() const {
 		return flags_;
 	}
 
@@ -60,7 +60,7 @@ public:
 	}
 
 	// Brightness
-	inline uint8_t getBrightness() {
+	inline uint8_t getBrightness() const {
 		return brightness_;
 	}
 

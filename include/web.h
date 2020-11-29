@@ -1,11 +1,8 @@
 #ifndef WEB_H
 #define WEB_H
 
-#include <Arduino.h>
-#include <WebSocketsServer.h>
 #include <ESPAsyncUDP.h>
 #include "jsonhandler.h"
-
 
 const unsigned int UDP_PORT = 8780;
 
@@ -18,7 +15,6 @@ public:
 private:
 	JsonHandler *json;
 	AsyncUDP *udpSocket_;
-	WebSocketsServer *webSocket_;
 
 	// Singleton realization
 	Web() = default;

@@ -5,7 +5,7 @@
 #include <Arduino.h>
 ADC_MODE(ADC_VCC)
 
-#include <WiFiManager.h>
+#include <ESPAsyncWiFiManager.h>
 #include "serialmanager.h"
 #include "otaupdater.h"
 #include "ledcontroller.h"
@@ -25,7 +25,9 @@ void setup() {
 	ledController->init();
 	
 	// Init Wifi connection manager
-	WiFiManager wifiManager;
+	AsyncWebServer server(80);
+	DNSServer dns;
+	AsyncWiFiManager wifiManager(&server, &dns);
 	wifiManager.autoConnect();
 	#ifdef DEBUG
 	wifiManager.setDebugOutput(true);
