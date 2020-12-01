@@ -1,18 +1,17 @@
 #include "ledcontroller.h"
 #include "palette.h"
 
-
 Palette::Palette(String palette_name, CRGBPalette16 pal) :
-	name(palette_name), palette(pal) {
-	LedController::getInstance()->addPalette(this);
+	name_(palette_name), palette_(pal) {
+	LedController::getInstance()->getPalettes()->add(this);
 }
 
 // --- List of palettes ---
-FL_PROGMEM Palette rainbowPalette("Rainbow", Rainbow_gp);
-FL_PROGMEM Palette rainbowStripePalette("Rainbow Stripe", RainbowStripeColors_p);
-FL_PROGMEM Palette cloudPalette("Cloud", CloudColors_p);
-FL_PROGMEM Palette lavaPalette("Lava", LavaColors_p);
-FL_PROGMEM Palette oceanPalette("Ocean", OceanColors_p);
-FL_PROGMEM Palette forestPalette("Forest", ForestColors_p);
-FL_PROGMEM Palette partyPalette("Party", PartyColors_p);
-FL_PROGMEM Palette heatPalette("Heat", HeatColors_p);
+Palette *rainbowPalette			= new Palette("Rainbow", Rainbow_gp);
+Palette *rainbowStripePalette	= new Palette("Rainbow Stripe", RainbowStripeColors_p);
+Palette *cloudPalette			= new Palette("Cloud", CloudColors_p);
+Palette *lavaPalette			= new Palette("Lava", LavaColors_p);
+Palette *oceanPalette			= new Palette("Ocean", OceanColors_p);
+Palette *forestPalette			= new Palette("Forest", ForestColors_p);
+Palette *partyPalette			= new Palette("Party", PartyColors_p);
+Palette *heatPalette			= new Palette("Heat", HeatColors_p);

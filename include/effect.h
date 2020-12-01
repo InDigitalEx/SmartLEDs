@@ -8,17 +8,10 @@ const uint8_t EFFECT_OBJECTS = 5;
 
 class Effect {
 public:
-	Effect(
-		String effect_name = "Безымянный"
-		, uint8_t default_speed = 10
-		, uint8_t default_scale = 1
-		, uint8_t default_flags = 0x0
-		, uint8_t default_brightness = 255) :
-		name_(effect_name)
-		, speed_(default_speed)
-		, scale_(default_scale)
-		, flags_(default_flags)
-		, brightness_(default_brightness) {
+	Effect(String name, uint8_t speed = 8, uint8_t scale = 1,
+		uint8_t params = 0, uint8_t brightness = 255) :
+		name_(name), speed_(speed), scale_(scale),
+		params_(params), brightness_(brightness) {
 	}
 
 	// Virtual function for effect
@@ -51,12 +44,12 @@ public:
 		scale_ = scale;
 	}
 	
-	inline uint8_t getFlags() const {
-		return flags_;
+	inline uint8_t getParams() const {
+		return params_;
 	}
 
-	inline void setFlags(uint8_t flags) {
-		flags_ = flags;
+	inline void setParams(uint8_t params) {
+		params_ = params;
 	}
 
 	// Brightness
@@ -68,16 +61,33 @@ public:
 		brightness_ = brightness;
 	}
 
+	// Mode
+	inline uint8_t getMode() const {
+		return mode_;
+	}
+
+	inline void setMode(uint8_t mode) {
+		mode_ = mode;
+	}
+	
+	enum Params {
+		PARAM_NONE = 0x0,
+		PARAM_COLORPICKER = 0x02,
+		PARAM_PALETTE = 0x01
+	};
+
 	enum Modes {
-		HAS_PALETTE = 0x01,
-		HAS_COLORPICKER = 0x02
+		MODE_COLORPICKER,
+		MODE_PALETTE,
+		MODE_LIGHTMUSIC
 	};
 private:
 	String name_;
 	uint8_t speed_;
 	uint8_t scale_;
-	uint8_t flags_;
+	uint8_t params_;
 	uint8_t brightness_;
+	uint8_t mode_ = 0;
 };
 
 #endif // EFFECT_H

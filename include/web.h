@@ -9,6 +9,7 @@ const unsigned int UDP_PORT = 8780;
 class Web {
 public:
     static Web *getInstance();
+	~Web();
 
 	void init();
 	void handle();

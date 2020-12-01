@@ -2,31 +2,31 @@
 #include "effect.h"
 
 static LedController *controller = LedController::getInstance();
+static Manager<Effect>* effects = controller->getEffects();
 static CRGB *leds = controller->getLeds();
 
 // Effects
 class PaletteViewer : public Effect {
 public:
-	PaletteViewer() : Effect(F("Просмотр палитр"), 0, 2, HAS_PALETTE) {
-		controller->addEffect(this);
+	PaletteViewer() : Effect(F("Просмотр палитр"), 8, 2, PARAM_PALETTE) {
+		effects->add(this);
 	};
 	void Run() {
-		EVERY_N_SECONDS(3) {
-			static byte i;
-			if (++i >= controller->getVectorOfPalettes()->size())
-				i = 0;
-			controller->setCurrentPalette(i);
-		}
 		static byte counter;
+		static unsigned long lastTime = millis();
+		if (millis() - lastTime >= getSpeed()) {
+			counter++;
+			lastTime = millis();
+		}
 		fill_palette(leds, NUM_LEDS, counter, getScale(),
-			controller->getCurrentPalette(), getBrightness(), LINEARBLEND);
+			controller->getBlendPalette(), getBrightness(), LINEARBLEND);
 	}
 } paletteViewer;
 
 class Pride : public Effect {
 public:
-	Pride() : Effect(F("Pride"), 10) {
-		controller->addEffect(this);
+	Pride() : Effect(F("Pride"), 8) {
+		effects->add(this);
 	};
 	void Run() {
 		static uint16_t sPseudotime = 0;

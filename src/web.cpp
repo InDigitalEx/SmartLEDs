@@ -6,6 +6,11 @@ Web* Web::getInstance() {
     return &instance;
 }
 
+Web::~Web() {
+    delete json;
+    delete udpSocket_;
+}
+
 void Web::init() {
     json = new JsonHandler();
     json->init();
@@ -13,7 +18,7 @@ void Web::init() {
     // Init UDP Socket
     udpSocket_ = new AsyncUDP();
     if(udpSocket_->listen(UDP_PORT)) {
-        udpSocket_->onPacket([&](AsyncUDPPacket packet) {
+        udpSocket_->onPacket([&](const AsyncUDPPacket &packet) {
             // Light music implementation
         });
     }
