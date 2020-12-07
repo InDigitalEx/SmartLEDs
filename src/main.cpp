@@ -5,7 +5,12 @@
 #include <Arduino.h>
 ADC_MODE(ADC_VCC)
 
-#include <ESPAsyncWiFiManager.h>
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#elif defined ESP32
+#include <WiFi.h>
+#endif
+
 #include "serialmanager.h"
 #include "otaupdater.h"
 #include "ledcontroller.h"
@@ -19,20 +24,16 @@ static Web *web = Web::getInstance();
 void setup() {
 	// Init Serial
 	serial.init(115200);
-	while(!Serial) continue;
 
 	// Init SFX
 	ledController->init();
 	
-	// Init Wifi connection manager
-	AsyncWebServer server(80);
-	DNSServer dns;
-	AsyncWiFiManager wifiManager(&server, &dns);
-	wifiManager.autoConnect();
-	#ifdef DEBUG
-	wifiManager.setDebugOutput(true);
-	#endif
-	WiFi.setSleepMode(WIFI_NONE_SLEEP);
+	// Init Wifi
+	WiFi.begin("TP-Link_0A9A", "yGMau42i");
+	while(WiFi.status() != WL_CONNECTED) {
+		delay(100);
+		Serial.print("*");
+	}
 
 	// Init web module
 	web->init();
