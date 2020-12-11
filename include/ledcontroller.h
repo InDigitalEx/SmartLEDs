@@ -7,6 +7,7 @@
 #include "effect.h"
 #include "palette.h"
 #include "leds/manager.h"
+#include "defines.h"
 
 class LedController {
 public:
@@ -16,11 +17,11 @@ public:
 	void handle();
 
 	CRGB* getLeds();
-	inline Manager<Effect>* getEffects() { return &effects_; }
-	inline Manager<Palette>* getPalettes() { return &palettes_; }
-	inline CRGBPalette16& getBlendPalette() { return blendPalette_; }
+	ALWAYS_INLINE Manager<Effect>* getEffects() { return &effects_; }
+	ALWAYS_INLINE Manager<Palette>* getPalettes() { return &palettes_; }
+	ALWAYS_INLINE CRGBPalette16& getBlendPalette() { return blendPalette_; }
 
-	inline bool getPower() const { return power_; }
+	ALWAYS_INLINE bool getPower() const { return power_; }
 	void setPower(bool status);
 private:
 	// Singleton realization

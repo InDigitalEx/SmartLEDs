@@ -3,91 +3,61 @@
 
 #include <inttypes.h>
 #include <WString.h>
+#include "leds/setting.h"
+#include "defines.h"
 
-const uint8_t EFFECT_OBJECTS = 5;
+#define IS_MOD_ENABLED(value)	(mode()->get() & (value))
 
 class Effect {
 public:
-	Effect(String name, uint8_t speed = 8, uint8_t scale = 1,
-		uint8_t params = 0, uint8_t brightness = 255) :
-		name_(name), speed_(speed), scale_(scale),
-		params_(params), brightness_(brightness) {
+	Effect(String name, uint8_t available_modes = MODE_STANDARD,
+		std::initializer_list<Setting*> l = {}) : name_(name), settings_(l) {
+		availableModes_.set(available_modes);
 	}
 
 	// Virtual function for effect
 	virtual void Run() = 0;
 
 	// Name
-	inline String& getName() {
+	ALWAYS_INLINE String& name() {
 		return name_;
-	}
-	
-	inline void setName(String name) {
-		name_ = name;
-	}
-
-	// Speed
-	inline uint8_t getSpeed() const {
-		return speed_;
-	}
-
-	inline void setSpeed(uint8_t speed) {
-		speed_ = speed;
-	}
-
-	// Scale
-	inline uint8_t getScale() const {
-		return scale_;
-	}
-
-	inline void setScale(uint8_t scale) {
-		scale_ = scale;
-	}
-	
-	inline uint8_t getParams() const {
-		return params_;
-	}
-
-	inline void setParams(uint8_t params) {
-		params_ = params;
 	}
 
 	// Brightness
-	inline uint8_t getBrightness() const {
-		return brightness_;
+	ALWAYS_INLINE Setting* brightness() {
+		return &brightness_;
 	}
 
-	inline void setBrightness(uint8_t brightness) {
-		brightness_ = brightness;
+	// Modes
+	ALWAYS_INLINE Setting* availableModes() {
+		return &availableModes_;
 	}
 
-	// Mode
-	inline uint8_t getMode() const {
-		return mode_;
+	ALWAYS_INLINE Setting* mode() {
+		return &mode_;
 	}
-
-	inline void setMode(uint8_t mode) {
-		mode_ = mode;
-	}
-	
-	enum Params {
-		PARAM_NONE = 0x0,
-		PARAM_COLORPICKER = 0x02,
-		PARAM_PALETTE = 0x01
-	};
 
 	enum Modes {
-		MODE_COLORPICKER,
-		MODE_PALETTE,
-		MODE_LIGHTMUSIC
+		MODE_STANDARD		= 0b0001,
+		MODE_PALETTE		= 0b0010,
+		MODE_COLORPICKER	= 0b0100,
+		MODE_LIGHTMUSIC		= 0b1000
 	};
+	
+	// Settings
+	ALWAYS_INLINE std::vector<Setting*>* settings() {
+		return &settings_;
+	}
+
+	void addSetting(Setting& setting) {
+		settings_.push_back(&setting);
+	}
 private:
 	String name_;
-	uint8_t speed_;
-	uint8_t scale_;
-	uint8_t params_;
-	uint8_t brightness_;
-	uint8_t mode_ = 0;
+	Setting brightness_{"", 255};
+	Setting availableModes_;
+	Setting mode_;
+	std::vector<Setting*> settings_;
 };
 
 #endif // EFFECT_H

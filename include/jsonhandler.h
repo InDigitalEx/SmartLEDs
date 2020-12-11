@@ -5,12 +5,10 @@
 
 class JsonHandler
 {
-private:
-    uint16_t maxJsonListLength_;
 public:
     void init();
-    void generateJsonList(String& destination);
-    void handleIncomingText(uint8_t* payload);
+    void generateJson(String& destination);
+    void handleIncomingText(unsigned char* text);
 };
 
 #endif // JSONHANDLER_H

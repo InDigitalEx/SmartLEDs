@@ -34,6 +34,7 @@ void setup() {
 		delay(100);
 		Serial.print("*");
 	}
+	Serial.println();
 
 	// Init web module
 	web->init();
@@ -52,4 +53,8 @@ void loop() {
 	web->handle();
 	otaUpdater.handle();
 	yield();
+
+	#ifdef DEBUG
+	Serial.println(FastLED.getFPS());
+	#endif
 }

@@ -3,6 +3,7 @@
 
 #include <ESPAsyncUDP.h>
 #include "jsonhandler.h"
+#include "defines.h"
 
 const unsigned int UDP_PORT = 8780;
 
@@ -13,6 +14,9 @@ public:
 
 	void init();
 	void handle();
+	ALWAYS_INLINE JsonHandler* getJson() {
+		return json;
+	}
 private:
 	JsonHandler *json;
 	AsyncUDP *udpSocket_;

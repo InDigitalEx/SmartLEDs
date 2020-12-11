@@ -6,29 +6,12 @@ static Manager<Effect>* effects = controller->getEffects();
 static CRGB *leds = controller->getLeds();
 
 // Effects
-class PaletteViewer : public Effect {
-public:
-	PaletteViewer() : Effect(F("Просмотр палитр"), 8, 2, PARAM_PALETTE) {
-		effects->add(this);
-	};
-	void Run() {
-		static byte counter;
-		static unsigned long lastTime = millis();
-		if (millis() - lastTime >= getSpeed()) {
-			counter++;
-			lastTime = millis();
-		}
-		fill_palette(leds, NUM_LEDS, counter, getScale(),
-			controller->getBlendPalette(), getBrightness(), LINEARBLEND);
-	}
-} paletteViewer;
-
 class Pride : public Effect {
 public:
-	Pride() : Effect(F("Pride"), 8) {
+	Pride() : Effect("Прайд", MODE_STANDARD) {
 		effects->add(this);
 	};
-	void Run() {
+	void Run() override final {
 		static uint16_t sPseudotime = 0;
 		static uint16_t sLastMillis = 0;
 		static uint16_t sHue16 = 0;

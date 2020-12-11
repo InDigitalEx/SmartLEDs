@@ -9,49 +9,83 @@ static Manager<Palette>* palettes = controller->getPalettes();
 
 void JsonHandler::init() {
 
-    // Find max length of json document
-    size_t effectsCount = effects->getSize();
-    size_t palettesCount = palettes->getSize();
-
-    maxJsonListLength_ = 
-        JSON_ARRAY_SIZE(effectsCount)
-        + JSON_ARRAY_SIZE(palettesCount)
-        + palettesCount * JSON_OBJECT_SIZE(PALETTE_OBJECTS)
-        + effectsCount * JSON_OBJECT_SIZE(EFFECT_OBJECTS)
-        + JSON_OBJECT_SIZE(2) + ((effectsCount + palettesCount) * 24);
 }
 
-void JsonHandler::generateJsonList(String &destination) {
-    DynamicJsonDocument doc(maxJsonListLength_);
+void JsonHandler::generateJson(String &destination) {
+    /*
+        {
+            "effects": [
+                [
+                    "name",     // Name
+                    255,        // Brightness
+                    7,          // Modes
+                    3,          // Mode
+                    [
+                        [
+                            0,      // Index in array
+                            255,    // Value
+                            0,      // Min value
+                            255     // Max value
+                        ]
+                    ]
+                ]
+            ],
+            "palettes": [
+                "name",         // Name of palette
+                "name"
+            ]
+        }
+    */
+    DynamicJsonDocument doc(2048); // TODO: dynamic value calculation
 
-    JsonArray effectsJson = doc.createNestedArray("Effects");
-    JsonArray palettesJson = doc.createNestedArray("Palettes");
+    // Fill effects array
+    JsonArray effectsJson = doc.createNestedArray("effects");
 
-    // Create effects array
     auto effectsVector = effects->getVectorOfData();
-    for(auto e : *effectsVector) {
-        JsonObject effect = effectsJson.createNestedObject();
+    size_t effectsSize = effectsVector->size();
 
-        effect["Name"] = e->getName();
-        effect["Speed"] = e->getSpeed();
-        effect["Scale"] = e->getScale();
-        effect["Params"] = e->getParams();
-        effect["Brightness"] = e->getBrightness();
+    for(size_t i = 0; i < effectsSize; i++) {
+        JsonArray effect = effectsJson.createNestedArray();
+        Effect *e = effectsVector->at(i);
+
+        effect.add(e->name());
+        effect.add(e->brightness()->get());
+        effect.add(e->availableModes()->get());
+        effect.add(e->mode()->get());
+
+        // Fill settings array
+        auto settingsVector = e->settings();
+        size_t settingsSize = settingsVector->size();
+        JsonArray settings = effect.createNestedArray();
+
+        for(size_t j = 0; j < settingsSize; j++) {
+            JsonArray setting = settings.createNestedArray();
+            Setting *s = settingsVector->at(j);
+
+            setting.add(j);
+            setting.add(s->getName());
+            setting.add(s->get());
+            setting.add(s->getMinValue());
+            setting.add(s->getMaxValue());
+        }
     }
-    
-    // Create palettes array
+
+    // Fill palettes array
+    JsonArray palettesJson = doc.createNestedArray("palettes");
+
     auto palettesVector = palettes->getVectorOfData();
-    for(auto p : *palettesVector) {
-        JsonObject palette = palettesJson.createNestedObject();
-        palette["Name"] = p->getName();
+    size_t palettesSize = palettesVector->size();
+    
+    for(size_t i = 0; i < palettesSize; i++) {
+        palettesJson.add(palettesVector->at(i)->getName());
     }
 
-    // Convert json doc to string
+    // Convert json document to string
     serializeJson(doc, destination);
 }
 
-void JsonHandler::handleIncomingText(uint8_t* text) {
-    DynamicJsonDocument doc(JSON_OBJECT_SIZE(7) + 53);
+void JsonHandler::handleIncomingText(unsigned char *text) {
+    DynamicJsonDocument doc(JSON_OBJECT_SIZE(1)+32);
 
     DeserializationError error = deserializeJson(doc, text);
     if(error != DeserializationError::Ok) {
@@ -61,46 +95,40 @@ void JsonHandler::handleIncomingText(uint8_t* text) {
         return;
     }
 
-    if(doc.containsKey("EffectId")) {
-        effects->setCurrent(doc["EffectId"]);
+    if(doc.containsKey("effect")) {
+        effects->setCurrent(doc["effect"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Effect to %d", doc["EffectId"].as<int>());
+        Serial.printf("Set Current Effect to %d", doc["effect"].as<int>());
         #endif
     }
-    if(doc.containsKey("PaletteId")) {
-        palettes->setCurrent(doc["PaletteId"]);
+    else if(doc.containsKey("palette")) {
+        palettes->setCurrent(doc["palette"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Palette to %d", doc["PaletteId"].as<int>());
+        Serial.printf("Set Current Palette to %d", doc["palette"].as<int>());
         #endif
     }
-    if(doc.containsKey("Speed")) {
-        effects->getCurrent()->setSpeed(doc["Speed"]);
+    else if(doc.containsKey("mode")) {
+        effects->getCurrent()->mode()->set(doc["mode"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Speed to %d", doc["Speed"].as<int>());
+        Serial.printf("Set Current Mode to %d", doc["mode"].as<int>());
         #endif
     }
-    if(doc.containsKey("Scale")) {
-        effects->getCurrent()->setScale(doc["Scale"]);
+    else if(doc.containsKey("brightness")) {
+        effects->getCurrent()->brightness()->set(doc["brightness"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Scale to %d", doc["Scale"].as<int>());
+        Serial.printf("Set Current Brightness to %d", doc["brightness"].as<int>());
         #endif
     }
-    if(doc.containsKey("Brightness")) {
-        effects->getCurrent()->setBrightness(doc["Brightness"]);
+    else if(doc.containsKey("power")) {
+        controller->setPower(doc["power"].as<bool>());
         #ifdef DEBUG
-        Serial.printf("Set Current Brightness to %d", doc["Brightness"].as<int>());
+        Serial.printf("Set power to %d", doc["power"].as<bool>());
         #endif
     }
-    if(doc.containsKey("Mode")) {
-        effects->getCurrent()->setMode(doc["Mode"]);
-        #ifdef DEBUG
-        Serial.printf("Set Current Mode to %d", doc["Mode"].as<int>());
-        #endif
-    }
-    if(doc.containsKey("Power")) {
-        controller->setPower(doc["Power"].as<bool>());
-        #ifdef DEBUG
-        Serial.printf("Set power to %d", doc["Power"].as<bool>());
-        #endif
+    else if(doc.containsKey("setting")) {
+        JsonObject setting = doc["setting"];
+        uint8_t id = setting["id"];
+        uint8_t value = setting["value"];
+        effects->getCurrent()->settings()->at(id)->set(value);
     }
 }
