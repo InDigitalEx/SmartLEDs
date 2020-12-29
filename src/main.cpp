@@ -42,7 +42,11 @@ void setup() {
 	// Init OTA
 	otaUpdater.init(true);
 
-	serial.printDebugInfo();
+	#ifdef DEBUG
+	//serial.printDebugInfo();
+	serial.printMemInfo();
+	#endif
+	
 }
 
 void loop() {

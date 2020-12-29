@@ -34,11 +34,7 @@ void LedController::handle() {
 
 	FastLED.setBrightness(effect->brightness()->get());
 	FastLED.show();
-	FastLED.delay(1000 / UPDATES_PER_SECOND);
-}
-
-CRGB* LedController::getLeds() {
-	return leds_;
+	//FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
 
 void LedController::setPower(bool status) {

@@ -23,6 +23,7 @@ void JsonHandler::generateJson(String &destination) {
                     [
                         [
                             0,      // Index in array
+                            "Name"  // Name of setting
                             255,    // Value
                             0,      // Min value
                             255     // Max value

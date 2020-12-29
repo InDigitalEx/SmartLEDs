@@ -55,8 +55,8 @@ public:
 private:
 	String name_;
 	Setting brightness_{"", 255};
-	Setting availableModes_;
-	Setting mode_;
+	Setting availableModes_{"", MODE_STANDARD};
+	Setting mode_{"", MODE_STANDARD};
 	std::vector<Setting*> settings_;
 };
 

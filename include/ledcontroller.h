@@ -16,7 +16,7 @@ public:
 	void init();
 	void handle();
 
-	CRGB* getLeds();
+	ALWAYS_INLINE CRGB* getLeds() { return leds_; }
 	ALWAYS_INLINE Manager<Effect>* getEffects() { return &effects_; }
 	ALWAYS_INLINE Manager<Palette>* getPalettes() { return &palettes_; }
 	ALWAYS_INLINE CRGBPalette16& getBlendPalette() { return blendPalette_; }

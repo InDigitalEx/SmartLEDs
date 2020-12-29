@@ -2,6 +2,8 @@
 #define WEB_H
 
 #include <ESPAsyncUDP.h>
+#include <ESPAsyncWebServer.h>
+#include <AsyncWebSocket.h>
 #include "jsonhandler.h"
 #include "defines.h"
 
@@ -14,12 +16,18 @@ public:
 
 	void init();
 	void handle();
-	ALWAYS_INLINE JsonHandler* getJson() {
-		return json;
-	}
+
+	ALWAYS_INLINE JsonHandler* getJson() { return json_; }
+
+	// Event handlers
+	void onServerRootEvent(AsyncWebServerRequest *request);
+	void onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client,
+		AwsEventType type, void * arg, uint8_t *data, size_t len);
 private:
-	JsonHandler *json;
+	JsonHandler *json_;
 	AsyncUDP *udpSocket_;
+	AsyncWebServer *server_;
+	AsyncWebSocket *webSocket_;
 
 	// Singleton realization
 	Web() = default;

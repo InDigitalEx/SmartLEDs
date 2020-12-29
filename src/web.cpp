@@ -1,5 +1,6 @@
 #include "web.h"
 #include <WString.h>
+#include <functional>
 
 Web* Web::getInstance() {
     static Web instance;
@@ -7,13 +8,15 @@ Web* Web::getInstance() {
 }
 
 Web::~Web() {
-    delete json;
+    delete json_;
     delete udpSocket_;
+    delete server_;
+    delete webSocket_;
 }
 
 void Web::init() {
-    json = new JsonHandler();
-    json->init();
+    json_ = new JsonHandler();
+    json_->init();
 
     // Init UDP Socket
     udpSocket_ = new AsyncUDP();
@@ -22,7 +25,40 @@ void Web::init() {
             // Light music implementation
         });
     }
+
+    server_ = new AsyncWebServer(80);
+    server_->on("/", HTTP_GET, std::bind(&Web::onServerRootEvent, this, std::placeholders::_1));
+    server_->on("/heap", HTTP_GET, [](AsyncWebServerRequest *request) {
+        request->send(200, "text/plain", String(ESP.getFreeHeap()));
+    });
+
+    webSocket_ = new AsyncWebSocket("/ws");
+    webSocket_->onEvent(std::bind(&Web::onWebSocketEvent, this,
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3,
+        std::placeholders::_4, std::placeholders::_5, std::placeholders::_6));
+
+    server_->addHandler(webSocket_);
+    server_->begin();
 }
 
 void Web::handle() {
+}
+
+void Web::onServerRootEvent(AsyncWebServerRequest *request) {
+
+}
+
+void Web::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type,
+    void * arg, uint8_t *data, size_t len) {
+    if(type == WS_EVT_CONNECT) {
+        String *tmp = new String();
+
+        json_->generateJson(*tmp);
+        client->text(*tmp);
+
+        delete tmp;
+    }
+    else if(type == WS_EVT_DATA) {
+        json_->handleIncomingText(data);
+    }
 }
