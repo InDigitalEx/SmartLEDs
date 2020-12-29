@@ -85,7 +85,7 @@ void JsonHandler::generateJson(String &destination) {
     serializeJson(doc, destination);
 }
 
-void JsonHandler::handleIncomingText(unsigned char *text) {
+void JsonHandler::handleIncomingText(const char* text) {
     DynamicJsonDocument doc(JSON_OBJECT_SIZE(1)+32);
 
     DeserializationError error = deserializeJson(doc, text);
@@ -99,31 +99,31 @@ void JsonHandler::handleIncomingText(unsigned char *text) {
     if(doc.containsKey("effect")) {
         effects->setCurrent(doc["effect"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Effect to %d", doc["effect"].as<int>());
+        Serial.printf("Set Current Effect to %d\n", doc["effect"].as<int>());
         #endif
     }
     else if(doc.containsKey("palette")) {
         palettes->setCurrent(doc["palette"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Palette to %d", doc["palette"].as<int>());
+        Serial.printf("Set Current Palette to %d\n", doc["palette"].as<int>());
         #endif
     }
     else if(doc.containsKey("mode")) {
         effects->getCurrent()->mode()->set(doc["mode"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Mode to %d", doc["mode"].as<int>());
+        Serial.printf("Set Current Mode to %d\n", doc["mode"].as<int>());
         #endif
     }
     else if(doc.containsKey("brightness")) {
         effects->getCurrent()->brightness()->set(doc["brightness"]);
         #ifdef DEBUG
-        Serial.printf("Set Current Brightness to %d", doc["brightness"].as<int>());
+        Serial.printf("Set Current Brightness to %d\n", doc["brightness"].as<int>());
         #endif
     }
     else if(doc.containsKey("power")) {
         controller->setPower(doc["power"].as<bool>());
         #ifdef DEBUG
-        Serial.printf("Set power to %d", doc["power"].as<bool>());
+        Serial.printf("Set power to %d\n", doc["power"].as<bool>());
         #endif
     }
     else if(doc.containsKey("setting")) {
@@ -131,5 +131,8 @@ void JsonHandler::handleIncomingText(unsigned char *text) {
         uint8_t id = setting["id"];
         uint8_t value = setting["value"];
         effects->getCurrent()->settings()->at(id)->set(value);
+        #ifdef DEBUG
+        Serial.printf("Set settings[%d] to %d\n", id, value);
+        #endif
     }
 }

@@ -8,7 +8,7 @@ class JsonHandler
 public:
     void init();
     void generateJson(String& destination);
-    void handleIncomingText(unsigned char* text);
+    void handleIncomingText(const char* text);
 };
 
 #endif // JSONHANDLER_H

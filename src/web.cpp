@@ -50,15 +50,32 @@ void Web::onServerRootEvent(AsyncWebServerRequest *request) {
 
 void Web::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type,
     void * arg, uint8_t *data, size_t len) {
-    if(type == WS_EVT_CONNECT) {
-        String *tmp = new String();
+    switch (type) {
+        case WS_EVT_CONNECT: {
+            Serial.printf("WebSocket client #%u connected from %s\n",
+                client->id(), client->remoteIP().toString().c_str());
+            String *tmp = new String();
 
-        json_->generateJson(*tmp);
-        client->text(*tmp);
+            json_->generateJson(*tmp);
+            client->text(*tmp);
+            delete tmp;
 
-        delete tmp;
-    }
-    else if(type == WS_EVT_DATA) {
-        json_->handleIncomingText(data);
+            break;
+        }
+        case WS_EVT_DISCONNECT: {
+            Serial.printf("WebSocket client #%u disconnected\n", client->id());
+            break;
+        }
+        case WS_EVT_DATA: {
+            AwsFrameInfo *info = (AwsFrameInfo*)arg;
+            if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
+                data[len] = 0;
+                json_->handleIncomingText((char*)data);
+            }
+            break;
+        }
+        case WS_EVT_PONG:
+        case WS_EVT_ERROR:
+        break;
     }
 }
