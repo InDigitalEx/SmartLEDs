@@ -7,8 +7,7 @@ LedController* LedController::getInstance() {
 
 void LedController::init() {
 	pinMode(LED_BUILTIN, OUTPUT);
-
-	FastLED.addLeds<LED_TYPE, DATA_PIN, LED_ORDER>(leds_, NUM_LEDS);
+	FastLED.addLeds<LED_TYPE, LED_PIN, LED_ORDER>(leds_, NUM_LEDS);
 	FastLED.setCorrection(TypicalLEDStrip);
 	FastLED.setDither(false);
 

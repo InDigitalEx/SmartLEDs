@@ -4,7 +4,6 @@
 #include <inttypes.h>
 #include <WString.h>
 #include "ledcontroller.h"
-#include "defines.h"
 
 const unsigned int PALETTE_OBJECTS = 1;
 
@@ -15,11 +14,11 @@ private:
 public:
 	Palette(String palette_name, CRGBPalette16 pal);
 
-	ALWAYS_INLINE String& getName() {
+	inline String& getName() {
 		return name_;
 	}
 
-	ALWAYS_INLINE CRGBPalette16& getPalette() {
+	inline CRGBPalette16& getPalette() {
 		return palette_;
 	}
 };

@@ -1,11 +1,17 @@
 #ifndef WEB_H
 #define WEB_H
 
+
+#ifdef ESP8266
 #include <ESPAsyncUDP.h>
+#elif defined(ESP32)
+#include <Arduino.h>
+#include <AsyncUDP.h>
+#endif
+
 #include <ESPAsyncWebServer.h>
 #include <AsyncWebSocket.h>
 #include "jsonhandler.h"
-#include "defines.h"
 
 const unsigned int UDP_PORT = 8780;
 
@@ -17,7 +23,7 @@ public:
 	void init();
 	void handle();
 
-	ALWAYS_INLINE JsonHandler* getJson() { return json_; }
+	inline JsonHandler* getJson() { return json_; }
 
 	// Event handlers
 	void onServerRootEvent(AsyncWebServerRequest *request);

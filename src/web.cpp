@@ -1,4 +1,7 @@
 #include "web.h"
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <AsyncWebSocket.h>
 #include <WString.h>
 #include <functional>
 
@@ -26,9 +29,13 @@ void Web::init() {
         });
     }
 
+    // Initializing an async web server
     server_ = new AsyncWebServer(80);
+
+    // Handling Web Server
     server_->on("/", HTTP_GET, std::bind(&Web::onServerRootEvent, this, std::placeholders::_1));
     server_->on("/heap", HTTP_GET, [](AsyncWebServerRequest *request) {
+        // Sending free heap space data
         request->send(200, "text/plain", String(ESP.getFreeHeap()));
     });
 

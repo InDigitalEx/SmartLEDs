@@ -3,30 +3,31 @@
 
 #include <WString.h>
 #include <inttypes.h>
-#include "defines.h"
+
+typedef uint16_t SettingValue;
 
 class Setting
 {
 private:
     String name_;
-    uint8_t value_;
-    uint8_t min_;
-    uint8_t max_;
+    SettingValue value_;
+    SettingValue min_;
+    SettingValue max_;
 public:
-    Setting(String name = "", uint8_t value = 0, uint8_t min = 0, uint8_t max = 255) : 
+    Setting(String name = "", SettingValue value = 0, SettingValue min = 0, SettingValue max = 255) : 
         name_(name), min_(min), max_(max) {
         set(value);
     }
 
-    ALWAYS_INLINE uint8_t get() const {
+    inline SettingValue get() const {
         return value_;
     }
 
-    ALWAYS_INLINE uint8_t operator()() const {
+    inline SettingValue operator()() const {
         return value_;
     }
 
-    void set(uint8_t value) {
+    void set(SettingValue value) {
         value_ = constrain(value, min_, max_);
     }
 
@@ -34,11 +35,11 @@ public:
         return name_;
     }
 
-    ALWAYS_INLINE uint8_t getMinValue() const {
+    inline SettingValue getMinValue() const {
         return min_;
     }
 
-    ALWAYS_INLINE uint8_t getMaxValue() const {
+    inline SettingValue getMaxValue() const {
         return max_;
     }
 };

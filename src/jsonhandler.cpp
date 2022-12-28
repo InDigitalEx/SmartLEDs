@@ -63,7 +63,6 @@ void JsonHandler::generateJson(String &destination) {
             JsonArray setting = settings.createNestedArray();
             Setting *s = settingsVector->at(j);
 
-            setting.add(j);
             setting.add(s->getName());
             setting.add(s->get());
             setting.add(s->getMinValue());
@@ -86,7 +85,7 @@ void JsonHandler::generateJson(String &destination) {
 }
 
 void JsonHandler::handleIncomingText(const char* text) {
-    DynamicJsonDocument doc(JSON_OBJECT_SIZE(1)+32);
+    DynamicJsonDocument doc(JSON_OBJECT_SIZE(3)+32);
 
     DeserializationError error = deserializeJson(doc, text);
     if(error != DeserializationError::Ok) {
@@ -128,8 +127,8 @@ void JsonHandler::handleIncomingText(const char* text) {
     }
     else if(doc.containsKey("setting")) {
         JsonObject setting = doc["setting"];
-        uint8_t id = setting["id"];
-        uint8_t value = setting["value"];
+        SettingValue id = setting["id"];
+        SettingValue value = setting["value"];
         effects->getCurrent()->settings()->at(id)->set(value);
         #ifdef DEBUG
         Serial.printf("Set settings[%d] to %d\n", id, value);

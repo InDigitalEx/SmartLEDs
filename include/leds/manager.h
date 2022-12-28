@@ -3,7 +3,6 @@
 
 #include <inttypes.h>
 #include <vector>
-#include "defines.h"
 
 template<class T>
 class Manager
@@ -22,12 +21,12 @@ public:
 
 // Template implementation
 template<typename T>
-ALWAYS_INLINE std::vector<T*>* Manager<T>::getVectorOfData(){
+inline std::vector<T*>* Manager<T>::getVectorOfData() {
     return &data_;
 }
 
 template<typename T>
-ALWAYS_INLINE std::size_t Manager<T>::getSize() const {
+inline std::size_t Manager<T>::getSize() const {
     return data_.size();
 }
 
@@ -45,12 +44,12 @@ void Manager<T>::setCurrent(uint16_t id) {
 }
 
 template<typename T>
-ALWAYS_INLINE T* Manager<T>::getCurrent() const {
+inline T* Manager<T>::getCurrent() const {
     return data_[currentIdx_];
 }
 
 template<typename T>
-ALWAYS_INLINE T* Manager<T>::operator()() const {
+inline T* Manager<T>::operator()() const {
     return this->getCurrent();
 }
 
